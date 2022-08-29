@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col col-md-6 d-flex justify-content-center" >
+            <div class="card">
+                {% if darts.picture %}
+                    <img class="card-img-top" title="Detail" src="{{ darts.picture.url }}" alt="Card image cap">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ darts.name }}</h5>
+                    <p>Weight: {{ darts.user }}</p>
+                    <p class="card-text">{{ darts.description }}</p>
+                    <br>
+                    <p>Status: {% if darts.active %}Active{% else %}Inactive{% endif %}</p>
+                    <p><small>Created: {{ darts.timestamp }}</small></p>
+
+                    {% if not request.user == darts.user %}
+                        <p>Owner:
+                            {% if darts.user.email %}
+                                <a href = "mailto: {{ darts.user.email }}">{{ darts.user.username }}</a>
+                            {% else %}
+                                {{ darts.user.username }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    <!-- Update Darts -->
+                    {% if request.user.is_authenticated and request.user == darts.user %}
+                        <a href="{% url "accounts:update-darts" darts.id %}" class="card-link" role="button">
+                            <i class="fa-solid fa-pen-to-square" title="Edit"></i>
+                            Edit
+                        </a>
+                        <!-- Delete Darts -->
+                        <a href="{% url 'accounts:delete-darts' darts.id %}" class="card-link" role="button">
+                            <i class="fa-solid fa-trash" title="Delete"></i>
+                            Delete
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

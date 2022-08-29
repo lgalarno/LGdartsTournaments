@@ -1,0 +1,26 @@
+[
+    {
+        "model": "games.GameType",
+        "pk": 1,
+        "fields": {
+            "name": "BB",
+            "scoring": "Points"
+        }
+    },
+            {
+        "model": "games.GameType",
+        "pk": 2,
+        "fields": {
+            "name": "501",
+            "scoring": "Ranks"
+        }
+    },
+            {
+        "model": "games.GameType",
+        "pk": 3,
+        "fields": {
+            "name": "Cricket",
+            "scoring": "Points"
+        }
+    }
+]

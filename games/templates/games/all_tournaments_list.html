@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% if tournament_list %}
+            <h3>All tournaments:</h3>
+        {% else %}
+            <h3>There is no tournament yet in our database.</h3>
+        {% endif %}
+    <br><br><br>
+    </div>
+    {% if tournament_list %}
+        <div class="row">
+            {% if tournament_list %}
+                <div class="table-responsive">
+                    <table class="table"  id="data_table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Game Type</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Games</th>
+                            <th scope="col">Table(s)</th>
+                            <th scope="col">Start date</th>
+                            <th scope="col">Closed</th>
+                            <th scope="col">Owner</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for t in tournament_list %}
+                            <tr>
+                                <td>
+                                    {{ t.name }}
+                                </td>
+                                <td>
+                                    {{ t.gametype }}
+                                </td>
+                                <td>
+                                    {{ t.category }}
+                                </td>
+                                <td>
+                                    {{ t.get_number_of_games }} games
+                                </td>
+                                <td>
+                                    <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">Ranks</a>
+                                    {% if t.gametype.name != '501' %}
+                                        , <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">Scores</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ t.start_date }}
+                                </td>
+                                <td>
+                                    {{ t.active|yesno:"No,Yes" }}
+                                </td>
+                                <td>
+                                    {% if t.user.email %}
+                                        <a href = "mailto: {{ t.user.email }}">{{ t.user.username }}</a>
+                                    {% else %}
+                                        {{ t.user.username }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/games.js' %}"></script>
+{% endblock js %}

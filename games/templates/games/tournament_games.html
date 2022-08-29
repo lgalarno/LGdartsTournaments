@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+            <h2>Tournament {{ tournament.name }}</h2>
+            <h3>{{ tournament.gametype }}</h3>
+            <!-- Create a new game -->
+            <br>
+            <a href="#" role="button">
+                <i class="fa-regular fa-square-plus fa-lg" title="Create tournament"></i>
+                New game
+            </a>
+        </div>
+        <div class="col col-md-8">
+            {% if games %}
+                <h3>Games</h3>
+                <hr>
+                <div class="table-responsive">
+                    <table class="table"  id="data_table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            {% for i in nplayerslist %}
+                                <th></th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for g in games %}
+                            <tr>
+                                <td>
+                                    {{ g.number }}
+                                </td>
+                                <td>
+                                    {{ g.datetime|date:"Y-m-j" }}
+                                </td>
+                                <td>
+                                    {{ g.datetime|date:"H:i" }}
+                                </td>
+                                {% for p in g.participant_set.all %}
+                                    <td>{{ p.player.name }} {{ p.score }}</td>
+                                {% endfor %}
+                              </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+{% endblock %}
+

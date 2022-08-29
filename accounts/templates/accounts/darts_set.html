@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col col-md-6">
+        {% if darts %}
+            {% for d in darts %}
+                <P>{{ d.name }}</P>
+            {% endfor %}
+        {% endif %}
+            <a href="{% url 'accounts:create-darts' %}" role="button">
+                <i class="fa-regular fa-square-plus fa-lg" title="Add new darts"></i>
+                Add new darts
+            </a>
+        </div>
+    </div>
+
+{% endblock content %}

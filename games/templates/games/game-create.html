@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}{{ gamecategory }}{% endblock %}
+
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="row justify-content-md-center">
+            <div class="col-md-4">
+                <h3>Game</h3>
+                <hr>
+                <h4>Tournament: {{ tournament.name }}</h4>
+                <h5 id="gametype" gametype="{{ tournament.gametype.name }}">Game type: {{ tournament.gametype.name }}</h5>
+                <br>
+                <h5 id="participantscheck" class="alert alert-danger" style="display: none;">
+                    Error: all participants should be different.
+                </h5>
+                {{ form|crispy }}
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-4">
+            <h3>Results</h3>
+            <hr>
+                {% for form in participant_formset %}
+                    <div class="participant-form">
+                        {{ participant_formset.management_form }}
+                        <h4>{{ form.participant }}</h4>
+                        {{ form.as_p }}
+                    </div>
+                    <hr>
+                {% endfor %}
+                <button type="submit" id="submitbtn" class="btn btn-primary">Save</button>
+                <a href="{{ back_link }}" class="btn btn-primary">
+                    Back
+                </a>
+                {% if new_result_btn %}
+                    <a href="{% url 'games:game-create' tournament_id=tournament.id %}" class="btn btn-primary">
+                        New result
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/games.js' %}"></script>
+{% endblock js %}

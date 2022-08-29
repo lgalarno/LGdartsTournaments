@@ -1,0 +1,64 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg bg-light lga">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="{% static 'images/dartboard.jpg' %}" height="30" class="d-inline-block align-top rounded-circle" alt="LGdartsTournaments"> LGdartsTournaments</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Darts
+                    </a>
+                    <ul class="dropdown-menu">
+                        <a class="nav-link" href="{% url 'accounts:list-all-darts' %}">All darts</a>
+                        {% if request.user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'accounts:list-darts' %}">Your darts</a>
+                            <a class="nav-link" href="{% url 'accounts:create-darts' %}" role="button">
+                                <i class="fa-regular fa-square-plus fa-lg" title="Add new darts"></i>
+                                New
+                            </a>
+                        {% endif %}
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tournaments
+                    </a>
+                    <ul class="dropdown-menu">
+                        <a class="nav-link" href="{% url 'games:list-all-tournaments' %}">All tournaments</a>
+
+                        {% if request.user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'games:list-tournaments' %}">Your tournaments</a>
+                            <a class="nav-link" href="{%  url 'games:create-tournaments' %}" role="button">
+                                <i class="fa-regular fa-square-plus fa-lg" title="Create tournament"></i>
+                                New
+                            </a>
+                        {% endif %}
+
+                    </ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'accounts:EditProfile' %}"><i class="far fa-id-card"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    {% if not request.user.is_authenticated and not "login" in request.get_full_path %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Log in</a></li>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

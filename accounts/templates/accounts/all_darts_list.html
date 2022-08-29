@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+    {% if darts_list %}
+        <h3>All our darts:</h3>
+    {% else %}
+        <h3>There are no darts yet in our database.</h3>
+    {% endif %}
+    </div>
+    {% if darts_list %}
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table"  id="data_table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Games</th>
+                        <th scope="col">Owner</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in darts_list %}
+                        <tr>
+                            <td>
+                                <a href = "{% url 'accounts:darts-detail' d.id %}">{{ d.name }}</a>
+                            </td>
+                            <td>
+                                {{ d.weight }}
+                            </td>
+                            <td>
+                                {{ d.timestamp }}
+                            </td>
+                            <td>
+                                Games
+                            </td>
+                            <td>
+                                {% if d.user.email %}
+                                    <a href = "mailto: {{ d.user.email }}">{{ d.user.username }}</a>
+                                {% else %}
+                                    {{ d.user.username }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/accounts.js' %}"></script>
+{% endblock js %}

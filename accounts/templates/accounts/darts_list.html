@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% if darts_list %}
+            <h3>Your darts</h3>
+        {% else %}
+            <h3>Your have no darts.</h3>
+        {% endif %}
+        <a href="{% url 'accounts:create-darts' %}" role="button">
+            <i class="fa-regular fa-square-plus fa-lg" title="Add new darts"></i>
+            Add new darts
+        </a>
+    </div>
+    {% if darts_list %}
+        <div class="row">
+            {% for darts in darts_list %}
+                <div class="card">
+                    {% if darts.picture %}
+                        <img class="card-img-top" title="Detail" src="{{ darts.picture.url }}" alt="Card image cap">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title"><a class="" href="{{ darts.get_absolute_url }}" title="Detail">{{ darts.name }}</a></h5>
+    {% comment %}                    <!-- View Details -->
+                        <a href="{{ darts.get_absolute_url }}" class="card-link" role="button">
+                            <i class="fa-solid fa-circle-info" title="Detail"></i>
+                            Detail
+                        </a>{% endcomment %}
+                        <!-- Update Darts -->
+                        <a href="{% url 'accounts:update-darts' darts.id %}" class="card-link" role="button">
+                            <i class="fa-solid fa-pen-to-square" title="Edit"></i>
+                            Edit
+                        </a>
+                        <!-- Delete Darts -->
+                        <a href="{% url 'accounts:delete-darts' darts.id %}" class="card-link" role="button">
+                            <i class="fa-solid fa-trash" title="Delete"></i>
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+

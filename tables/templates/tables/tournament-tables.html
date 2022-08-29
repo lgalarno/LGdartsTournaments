@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ tbl_type }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h2>{{ tournament.name }} {{ tournament.gametype }} tables</h2>
+
+        {% if tournament.active %}
+             <a href="{% url 'games:game-create' tournament_id=tournament.id %}" role="button">
+                <i class="fa-regular fa-square-plus fa-lg" title="New game"></i>
+                New game
+             </a>
+        {% endif %}
+        <hr style="border-top: 2px solid #d9d9d9;">
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <h3>Games</h3>
+            <table class="table" id="games_table">
+                <thead>
+                    <tr>
+                        {% for h in main_headers %}
+                            <th>{{ h }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for k, r in main_tbl.items %}
+                    <tr>
+                        {% for s in r %}
+                            <td>{{ s }}</td>
+                        {% endfor %}
+                        <td>
+                            <a href="{% url "games:edit-game" k %}" class="btn btn-light btn-sm" role="button">
+                                <i class="fa-solid fa-pen-to-square" title="edit" aria-hidden="true"></i>
+                            </a>
+                            <a href="{% url "games:delete-game" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
+                                <i class="fa-solid fa-trash" title="delete" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-5">
+            <h3>{{ stable_title }}</h3>
+            <table class="table" id="standings_table">
+                <thead>
+                    <tr>
+                        {% for s in summary_headers %}
+                            <th >{{ s }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in summary_tbl %}
+                        <tr>
+                            {% for s in r %}
+                                <td>{{ s }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if tournament.gametype.name == 'BB' %}
+                {% if stable_title == 'Standings' %}
+                    <a href="{% url 'tables:tournament-tables' tournament_id=tournament.id tbl_type='scores' %}" class="btn btn-primary">
+                        < Scores table >
+                    </a>
+                {% elif stable_title == 'Average scores' %}
+                    <a href="{% url 'tables:tournament-tables' tournament_id=tournament.id tbl_type='ranks' %}" class="btn btn-primary">
+                        < Ranks table >
+                    </a>
+                {% endif %}
+            {% endif %}
+            <br>
+            <br>
+            <a href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type=tbl_type %}" class="btn btn-primary" role="button">
+                Export table to csv
+            </a>
+            <a href="{% url 'tables:export-zip' tournament_id=tournament.id %}" class="btn btn-primary" role="button">
+                Export tables to zip
+            </a>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/tables.js' %}"></script>
+{% endblock js %}

@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from accounts.models import Darts, User
 from games.models import Game, Participant, Tournament, GameType
 
@@ -5,10 +7,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import csv
-
-
-def csv_501_to_ranks(f, darts):
-    pass
 
 
 def csv_to_db(f, darts):
@@ -41,7 +39,6 @@ def csv_to_db(f, darts):
                         pscore = [None for i in range(len(pscore))]
 
                     for i, d in enumerate(darts):
-                        print(d)
                         participant = Participant(game=g,
                                                   rank=pranks[i],
                                                   score=pscore[i],
@@ -65,7 +62,7 @@ def _get_dt(d, t):
     date = datetime.strptime(d, "%Y-%m-%d").date()
     time = datetime.strptime(t, "%H:%M").time()
     dt = datetime.combine(date, time)
-    dt.replace(tzinfo=ZoneInfo('Canada/Eastern'))
+    dt = dt.replace(tzinfo=ZoneInfo('Canada/Eastern'))
     return dt
 
 
@@ -85,14 +82,16 @@ def ranking(scores):
 def create_darts(d_dict, u):
     try:
         for d in d_dict:
-            darts = Darts(
-                name=d,
-                user=u,
-                weight=d_dict[d]['weight'],
-                description=d_dict[d]['description'],
-                active=True
-            )
-            darts.save()
+            q = Darts.objects.filter(name=d)
+            if not q:
+                darts = Darts(
+                    name=d,
+                    user=u,
+                    weight=d_dict[d]['weight'],
+                    description=d_dict[d]['description'],
+                    active=True
+                )
+                darts.save()
     except:
         return False
     return True
@@ -106,7 +105,7 @@ def create_tournaments(t_dict, darts, u):
             tournament = Tournament(
                 name=t,
                 gametype=gt,
-                category='Continual',
+                scheduling='Continual',
                 matching='all',
                 start_date=date,
                 end_date=None,
@@ -159,7 +158,9 @@ def main():
             for f in files:
                 if not csv_to_db(f, darts):
                     print('Error entering games in the db')
-                print('It worked!')
+                    break
+                else:
+                    print('It worked!')
         else:
             print('Error creating the tournaments')
     else:
@@ -167,4 +168,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print('starting...')
     main()

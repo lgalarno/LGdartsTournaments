@@ -19,6 +19,5 @@ urlpatterns = [
     path('delete-tournament/<int:pk>/', TournamentDeleteView.as_view(), name="delete-tournament"),
     path('delete-game/<int:pk>/', views.delete_game, name="delete-game"),
     path('game-create/<int:tournament_id>/', views.game_create, name="game-create"),
-    path('edit-game/<int:pk>/', GameUpdateView.as_view(), name="edit-game"),
-    path('api/', include('games.api.urls', namespace="games-api")),
+    path('edit-game/<int:pk>/', GameUpdateView.as_view(), name="edit-game")
 ]

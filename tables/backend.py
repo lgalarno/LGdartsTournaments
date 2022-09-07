@@ -135,14 +135,6 @@ def write_csv(h1, l1, h2, l2):
     return mem_file
 
 
-def round_robin_standings(tournament):
-    games = tournament.game_set.all().order_by('round', '-datetime')
-    gametype = tournament.gametype
-    tbb = {}
-
-    return tbb
-
-
 def round_robin_formset(tournament):
     """
     :param tournament:

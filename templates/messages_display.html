@@ -2,7 +2,14 @@
     <div class="messages">
         <ul class="messages">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            <li{% if message.tags %} class="{% if message.tags == 'warning' %}
+                                                    alert alert-warning
+                                                {% elif message.tags == 'error' %}
+                                                    alert alert-danger
+                                                {% elif message.tags == 'success' %}
+                                                    alert alert-success
+                                                {% endif %}"
+                                            {% endif %}>
                 {% if "html_safe" in message.tags %}
                     {{ message|safe }}
                 {% else %}

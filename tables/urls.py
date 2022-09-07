@@ -12,5 +12,5 @@ urlpatterns = [
     path('delete-zip/<int:pk>/', login_required(views.deletezip), name="delete-zip"),
     path('export-csv/<int:tournament_id>/<tbl_type>/', login_required(views.export_csv), name="export-csv"),
     path('tournament-tables/<int:tournament_id>/<tbl_type>/', views.tournament_tables, name="tournament-tables"),
-    path('tournament-wdl/<int:tournament_id>/', views.tournament_wdl, name="tournament-wdl"),
+    path('tournament-rr-tables/<int:tournament_id>/', views.tournament_rr_tables, name="tournament-rr-tables")
 ]

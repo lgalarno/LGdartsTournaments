@@ -11,7 +11,6 @@ def csv_501_to_ranks(f, darts):
     pass
 
 
-
 def csv_to_db(f, darts):
     """
     Import previous data from a csv file to the db
@@ -161,8 +160,6 @@ def main():
                 if not csv_to_db(f, darts):
                     print('Error entering games in the db')
                 print('It worked!')
-            else:
-                print('Error creating the games')
         else:
             print('Error creating the tournaments')
     else:

@@ -1,17 +1,20 @@
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, reverse
 from django.utils.encoding import smart_str
+
+from datetime import datetime
 
 import csv
 import os
 import zipfile
 
 from accounts.models import User
-from games.models import Tournament
+from games.models import Tournament, Game, Participant
 
-from .backend import rankstable, bb_score_tables, write_csv
+
+from .backend import rankstable, bb_score_tables, write_csv, round_robin_formset
 from .models import Zipcsvfile
 
 
@@ -40,8 +43,67 @@ def tournament_tables(request, tournament_id, tbl_type):
     return render(request, f'tables/tournament-tables.html', context)
 
 
-def tournament_wdl(request, tournament_id):
-    return HttpResponse('To come...')
+def tournament_rr_tables(request, tournament_id):
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    gametype = str(tournament.gametype)
+    if request.method == "POST":
+        ok = True
+        gamenumber = request.POST.get('submit', None)
+        if gamenumber is None:
+            raise Http404("No game selected")
+        game = get_object_or_404(Game, id=gamenumber)
+        game_participants = game.participant_set.all()
+        participant_ids = request.POST.getlist('darts', None)
+        try:
+            p1 = game_participants.get(darts=participant_ids[0])
+            p2 = game_participants.get(darts=participant_ids[1])
+        except:
+            raise Http404("The participants don't exist")
+        if gametype != "501":
+            """
+            if BB or Cricket, set the scores to participants and attribute the ranks
+            """
+            scores = request.POST.getlist('score', None)
+            if "" in scores:
+                messages.warning(request, "All the scores for the game should be entered")
+                ok = False
+            else:
+                p1.score = scores[0]
+                p2.score = scores[1]
+                if scores[0] > scores[1]:
+                    p1.rank = 2
+                    p2.rank = 0
+                elif scores[1] > scores[0]:
+                    p1.rank = 0
+                    p2.rank = 2
+                elif scores[1] == scores[0]:
+                    p1.rank = 1
+                    p2.rank = 1
+        else:
+            ranks_str = request.POST.getlist('rank', None)
+            ranks = [int(r) for r in ranks_str]
+            if sum(ranks) != 2:
+                messages.warning(request, "Win, Draw, Lose status for the game is inconsistent")
+                ok = False
+            else:
+                p1.rank = ranks[0]
+                p2.rank = ranks[1]
+        if ok:
+            p1.save()
+            p2.save()
+            game.datetime = datetime.now()  # u.get_datetime_local(is_now=True, dt=None)
+            game.played = True
+            game.save()
+
+    formset_dict, standings_headers, standings_tbl = round_robin_formset(tournament)
+    context = {
+        "title": "round-robin-table",
+        'schedule': formset_dict,
+        'standings_headers': standings_headers,
+        'standings_tbl': standings_tbl,
+        "tournament": tournament,
+    }
+    return render(request, f'tables/tournament-rr-tables.html', context)
 
 
 def export_csv(request, tournament_id, tbl_type):

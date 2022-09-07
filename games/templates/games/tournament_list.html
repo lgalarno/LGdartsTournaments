@@ -3,7 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="row justify-content-md-center">
+    <div class="row">
         {% if tournament_list %}
             <h3>Tournaments: </h3>
         {% else %}
@@ -24,11 +24,12 @@
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Type</th>
+                        <th scope="col">Game</th>
+                        <th scope="col">Scheduling</th>
                         <th scope="col">Games</th>
                         <th scope="col">Table(s)</th>
                         <th scope="col">Start date</th>
-                        <th scope="col">Closed</th>
+                        <th scope="col">Active</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,32 +41,40 @@
                             <td>
                                 {{ t.gametype }}
                             </td>
-{% comment %}                            <td>
-                                {{ t.category }}
-                            </td>
                             <td>
-                                {{ t.matching }}
-                            </td>{% endcomment %}
+                                {{ t.scheduling }}
+                            </td>
                             <td>
                                 {{ t.get_number_of_games }} games
                                 {% if t.active %}
-                                    ,
-                                    <a href="{% url 'games:game-create' tournament_id=t.id %}">
-                                        New result
+                                    {% if t.scheduling != "Round-robin"%}
+                                        <a href="{% url 'games:game-create' tournament_id=t.id %}" class="btn btn-info btn-table">
+                                            New result
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if t.scheduling == "Round-robin"%}
+                                    <a href="{% url 'tables:tournament-rr-tables' tournament_id=t.id %}">
+                                        View
                                     </a>
+                                {% else %}
+                                    <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">Ranks</a>
+                                    {% if t.gametype.name != '501' %}
+                                        , <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">Scores</a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>
-                                <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">Ranks</a>
-                                {% if t.gametype.name != '501' %}
-                                    , <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">Scores</a>
+                                {% if t.start_date %}
+                                    {{ t.start_date }}
+                                {% else %}
+                                    --
                                 {% endif %}
                             </td>
                             <td>
-                                {{ t.start_date }}
-                            </td>
-                            <td>
-                                {{ t.active|yesno:"No,Yes" }}
+                                {{ t.active|yesno:"Yes,No" }}
                             </td>
                         </tr>
                     {% endfor %}

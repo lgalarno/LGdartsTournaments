@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.shortcuts import reverse
-
+from django.utils import timezone
 from accounts.models import Darts, User
 
 
@@ -25,9 +27,10 @@ class GameType(models.Model):
 
 
 class Tournament(models.Model):
-    CATEGORY = (
-        ('Continual', 'Going on, without any interruptions'),
-        ('Determined', 'Fixed number of tables'),
+    SCHEDULING = (
+        ('Continual', 'Going on until deactivation'),
+        # ('Determined', 'Fixed number of games'),
+        ('Round-robin', 'Round-robin (each contestant meets every other participant)'),
     )
     MATCHING = (
         ('all', 'All participants play every games'),
@@ -35,12 +38,13 @@ class Tournament(models.Model):
     )
     name = models.CharField(max_length=255)
     gametype = models.ForeignKey(to=GameType, default=1, on_delete=models.CASCADE, related_name='gametype', blank=False)
-    category = models.CharField(choices=CATEGORY, default='Continual', max_length=16, blank=False)
-    matching = models.CharField(choices=MATCHING, default='all', max_length=16, blank=False)
+    scheduling = models.CharField(choices=SCHEDULING, default='Continual', max_length=16, null=True,)
+    matching = models.CharField(choices=MATCHING, default='all', max_length=16, null=True)
+    number_of_rounds = models.IntegerField(null=True, blank=True)
     darts = models.ManyToManyField(to=Darts, related_name="darts")
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
     editable = models.BooleanField(default=True)
     city = models.CharField(max_length=120, blank=True, null=True)
     country = models.CharField(max_length=120, blank=True, null=True)
@@ -58,24 +62,31 @@ class Tournament(models.Model):
     def get_number_of_games(self):
         return self.game_set.all().count()
 
+    def get_number_of_players(self):
+        return self.darts.all().count()
+
 
 class Game(models.Model):
-    # number = models.IntegerField(blank=True, null=True)
     datetime = models.DateTimeField(blank=True, null=True)
     tournament = models.ForeignKey(to=Tournament, on_delete=models.CASCADE)
+    round = models.IntegerField(blank=True, null=True)
     played = models.BooleanField(default=True)
 
-    # class Meta:
-    #     unique_together = ['number', 'tournament']
+    class Meta:
+        ordering = ['-datetime', 'round']
 
     def __str__(self):
-        return f"{self.tournament.gametype}-{self.datetime}-{self.tournament}"
+        return f"{self.tournament}-{self.round}-{self.datetime}"
 
     def get_absolute_url(self):
         return reverse('games:edit-game', kwargs={'pk': self.pk})
 
     def get_delete_url(self):
         return reverse('games:delete-game', kwargs={'pk': self.pk})
+
+    @property
+    def get_datetime(self):
+        return timezone.localtime(self.datetime)
 
     def get_all_players(self):
         return [darts.darts.name for darts in self.participant_set.all()]
@@ -102,6 +113,15 @@ class Game(models.Model):
         """
         d = self.get_ranks()
         return ['+'.join(p for p in d if d[p] == k) for k in range(1, self.get_number_of_players() + 1)]
+
+
+# # method to find_if_the_game_was_played
+@receiver(post_save, sender=Game, dispatch_uid="find_if_the_game_was_played")
+def updategame_played(sender, instance, **kwargs):
+    r = instance.get_ranks()
+    if None in r.values() and instance.played is True:
+        instance.played = False
+        instance.save()
 
 
 class Participant(models.Model):

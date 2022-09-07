@@ -1,3 +1,5 @@
+from .forms import RRParticipantForm, RRGameForm
+
 import pandas as pd
 import csv
 import io
@@ -26,9 +28,10 @@ def rankstable(games, tournament):
     main_headers = ['#', 'Date', 'Time'] + maxplist + ['']
     ngames = len(games)
     for idx, game in enumerate(games):
+        dlocal = game.get_datetime
         main_tbl[game.id] = [ngames-idx,
-               game.datetime.strftime("%Y-%m-%d"),
-               game.datetime.strftime("%H:%M")] + game.get_ranking()
+               dlocal.strftime("%Y-%m-%d"),
+               dlocal.strftime("%H:%M")] + game.get_ranking()
         for d in game.participant_set.all():
             rankdict[d.darts.name].append(d.rank)
     summary_headers, summary_tbl = _summary_table_new(rankdict, maxplist)
@@ -92,9 +95,10 @@ def bb_score_tables(games, tournament):
         scores_tbl[name] = []
     ngames = len(games)
     for idx, game in enumerate(games):
-        tbb[game.id] = [ngames-idx,
-                        game.datetime.strftime("%Y-%m-%d"),
-                        game.datetime.strftime("%H:%M")]
+        dlocal = game.get_datetime
+        tbb[game.id] = [ngames - idx,
+                        dlocal.strftime("%Y-%m-%d"),
+                        dlocal.strftime("%H:%M")]
         for d in game.participant_set.all():
             scores_tbl[d.darts.name].append(d.score)
     df = pd.DataFrame(scores_tbl)
@@ -129,3 +133,73 @@ def write_csv(h1, l1, h2, l2):
     csv_writer.writerows([''])
     mem_file.seek(0)
     return mem_file
+
+
+def round_robin_standings(tournament):
+    games = tournament.game_set.all().order_by('round', '-datetime')
+    gametype = tournament.gametype
+    tbb = {}
+
+    return tbb
+
+
+def round_robin_formset(tournament):
+    """
+    :param tournament:
+    :return:
+    """
+    games = tournament.game_set.all().order_by('round', '-datetime')
+    gametype = tournament.gametype.name
+    p_ranks = {}
+    p_scores = {}
+    formset_dict = {}
+    for round in range(1, tournament.number_of_rounds + 1):
+        formset_dict[round] = [f"Round {round}"]
+        roundgames = games.filter(round=round)
+        for g in roundgames:
+            formset_dict[g.id] = [RRGameForm(instance=g)]
+            if g.played:
+                dlocal = g.get_datetime
+                formset_dict[g.id].append(dlocal.strftime("%Y-%m-%d"))
+                formset_dict[g.id].append(dlocal.strftime("%H:%M"))
+                scores = g.get_scores()
+                ranks = g.get_ranks()
+                for p in ranks:
+                    p_ranks.setdefault(p, []).append(ranks[p])
+                    if gametype != '501':
+                        p_scores.setdefault(p, []).append(scores[p])
+            else:
+                formset_dict[g.id].append('__')
+                formset_dict[g.id].append('__')
+
+            for p in g.participant_set.all():
+                formset_dict[g.id].append(p.darts.name)
+                f = RRParticipantForm(instance=p, game_type=gametype)
+                formset_dict[g.id].append(f)
+            formset_dict[g.id].append(g.played)
+    standings_tbl = rr_standings(p_ranks, p_scores, gametype)
+    standings_headers = ['W', 'L', 'D', 'pts']
+    if gametype != '501':
+        standings_headers.append('ppg')
+
+    return formset_dict, standings_headers, standings_tbl
+
+
+def rr_standings(p_ranks, p_scores, gametype ):
+    standings = []
+    for p in p_ranks:
+        d = frequencyDistribution(p_ranks[p])
+        temp = [p] + [d.get(n, 0) for n in [2, 0, 1]]
+        temp.append(sum(p_ranks[p]))
+        if gametype != '501':
+            temp.append(average(p_scores[p]))
+        standings.append(temp)
+    return standings
+
+
+def frequencyDistribution(data):
+    return {i: data.count(i) for i in data}
+
+
+def average(lst):
+    return round(sum(lst) / len(lst), 1)

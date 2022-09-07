@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+
+        <div class="col-md-6">
+            {% if games %}
+                <h3 class="d-inline-block">Games</h3>
+                <button class="btn btn-primary d-inline-block float-end" type="submit" data-href="#" >Accept</button>
+                <div class="rrgames">
+                    <table class="table">
+                        <tbody>
+                            {% for game in games %}
+                                <tr>
+                                    <th colspan="2" >
+                                        {{ round }}
+                                    </th>
+                                </tr>
+
+                                {% for game in games %}
+                                    <tr>
+                                    {% for p in game %}
+                                        <td>
+                                            {{ p }}
+                                        </td>
+                                    {% endfor %}
+                                    </tr>
+                                {% endfor %}
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <h3>Nothing!!!</h3>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/games.js' %}"></script>
+{% endblock js %}

@@ -24,15 +24,38 @@ a {
 a:hover {
   color: #000000;
 }
-.btn {
+.btn-table {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .75rem;
+}
+/*.btn {
   outline: none;
   color: black;
   background-color: transparent;
   box-shadow: 0 0 0 0;
-}
+}*/
 .clearfix {
   margin: 15px;
 }
 .card {
   width: 18rem;
+}
+
+.rrgames {
+  border-style: solid;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+select {
+  // A reset of styles, including removing the default dropdown arrow
+  appearance: none;
+  // Additional resets for further consistency
+  background-color: transparent;
+  // border: none;
+  border-radius: 5px;
+
 }

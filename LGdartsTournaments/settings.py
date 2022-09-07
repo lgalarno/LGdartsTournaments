@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # third party
     "crispy_forms",
     "crispy_bootstrap5",
+    'rest_framework',
     # custom app
     "accounts",
     "games",

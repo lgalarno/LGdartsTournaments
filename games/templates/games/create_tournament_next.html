@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
+            <h3>Tournament  {{ tournament.name }}</h3>
+            <br>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <a href="{% url 'games:update-tournament' pk=tournament.id %}"  class="btn btn-primary"> << Back </a>
+                <button type="submit" class="btn btn-primary"> {% if tournament.editable and tournament.scheduling == "Round-robin" %}Next  >>{% else %}Save{% endif %}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

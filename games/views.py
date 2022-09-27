@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.db import transaction
 from django.forms.models import modelformset_factory
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
@@ -7,8 +8,6 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, re
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
-
-from datetime import datetime
 
 from accounts.models import Darts, User
 
@@ -274,7 +273,8 @@ def game_create(request, tournament_id=None):
         if tournament.editable:
             tournament.editable = False
             tournament.save()
-            new_result_btn = True
+        new_result_btn = True
+        messages.success(request, "The game was saved.")
 
     if request.META.get("HTTP_REFERER") != request.build_absolute_uri():
         back_link = request.META.get("HTTP_REFERER")
@@ -288,7 +288,7 @@ def game_create(request, tournament_id=None):
         'new_result_btn': new_result_btn,
         'participant_formset': participant_formset
         }
-    return render(request, 'games/game-create.html', context)
+    return render(request, 'games/game_form.html', context)
 
 
 def delete_game(request, pk):
@@ -321,6 +321,7 @@ class GameUpdateView(LoginRequiredMixin, UpdateView):
             if participant_formset.is_valid():
                 participant_formset.instance = self.object
                 participant_formset.save()
+                messages.success(self.request, "The game was updated.")
         return super(GameUpdateView, self).form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
@@ -335,9 +336,15 @@ class GameUpdateView(LoginRequiredMixin, UpdateView):
         else:
             participant_formset = formset(queryset=participants, form_kwargs={'darts_qs': darts,
                                                                               'game_type': self.object.tournament.gametype.name})
+
+        if self.request.META.get("HTTP_REFERER") != self.request.build_absolute_uri():
+            back_link = self.request.META.get("HTTP_REFERER")
+        else:
+            back_link = reverse("tables:tournament-tables", kwargs={'tournament_id':self. object.tournament.id,
+                                                                    'tbl_type': 'ranks'})
         context["participant_formset"] = participant_formset
         context['tournament'] = self.object.tournament
+        context['back_link'] = back_link
         context['title'] = 'update-game'
         context['deleteURL'] = self.object.get_delete_url()
         return context
-

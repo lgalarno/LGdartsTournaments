@@ -67,7 +67,7 @@
                 </tbody>
             </table>
 
-            {% if tournament.gametype.name == 'BB' %}
+            {% if tournament.gametype.name == 'BB' or tournament.gametype.name == 'Cricket'%}
                 {% if stable_title == 'Standings' %}
                     <a href="{% url 'tables:tournament-tables' tournament_id=tournament.id tbl_type='scores' %}" class="btn btn-primary">
                         < Scores table >

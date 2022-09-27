@@ -69,7 +69,8 @@ class EditProfile(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return '/account/edit/'
 
-# TODO all tables by the darts here and in DartsListView, AllDartsListView
+
+# TODO all tables by darts here and in DartsListView, AllDartsListView
 class DartsDetailView(DetailView):
     model = Darts
 

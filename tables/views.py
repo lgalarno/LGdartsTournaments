@@ -11,7 +11,7 @@ import os
 import zipfile
 
 from accounts.models import User
-from games.models import Tournament, Game, Participant
+from games.models import Tournament, Game
 
 
 from .backend import rankstable, bb_score_tables, write_csv, round_robin_formset
@@ -106,6 +106,7 @@ def tournament_rr_tables(request, tournament_id):
     return render(request, f'tables/tournament-rr-tables.html', context)
 
 
+#TODO export rr tournaments in csv
 def export_csv(request, tournament_id, tbl_type):
     tournament = get_object_or_404(Tournament, id=tournament_id)
     games = tournament.game_set.all().order_by('-datetime')
@@ -178,14 +179,16 @@ def export_zip(request, tournament_id):
 
 
 def downloadzip(request, slug=None):
-    f = get_object_or_404(Zipcsvfile, slug=slug)
-    link = f.path
-    response = HttpResponse()
-    response['Content-Type'] = 'application/zip'
-    response['Content-Disposition'] = f"attachment; filename = {f.filename}"
-    response['X-Sendfile'] = smart_str(link)
-    f.timesdownloaded += 1
-    f.save()
+    zf = get_object_or_404(Zipcsvfile, slug=slug)
+    link = zf.path
+    f = open(smart_str(link), 'rb').read()
+    response = HttpResponse(
+        f,
+        content_type='text/csv',
+        headers={'Content-Disposition': f"attachment; filename = {zf.filename}"},
+    )
+    zf.timesdownloaded += 1
+    zf.save()
     return response
 
 

@@ -9,25 +9,23 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+config = dotenv_values(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = config["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(os.environ.get('DEBUG')) == "1"  # 1 == True
+DEBUG = str(config["DEBUG"]) == "1"  # 1 == True
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',') if os.environ.get('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = config["ALLOWED_HOSTS"].split(',') if config["ALLOWED_HOSTS"] else []
 
 
 # Application definition
@@ -86,23 +84,36 @@ WSGI_APPLICATION = "LGdartsTournaments.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 ######################################################################
-DEV = bool(int(os.getenv('DEV', False)))  # os.environ.get('DEV')
+DEV = bool(int(config.get('DEV', False)))  # os.environ.get('DEV')
 if DEV:
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         "NAME": BASE_DIR / "db.sqlite3",
+    #     }
+    # }
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+            'ENGINE': config["DATABASE_ENGINE"],
+            'HOST': config["DATABASE_HOST"],
+            'PORT': config["DATABASE_PORT"],
+            'USER': config["DATABASE_USER"],
+            'PASSWORD': config["DATABASE_PASSWORD"],
+            'NAME': config["DATABASE_NAME"],
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'use_unicode': True, },
+        },
     }
 else:
     DATABASES = {
         'default': {
-            'ENGINE': os.environ.get('DATABASE_ENGINE'),
-            'HOST': os.environ.get('DATABASE_HOST'),
-            'PORT': os.environ.get('DATABASE_PORT'),
-            'USER': os.environ.get('DATABASE_USER'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-            'NAME': os.environ.get('DATABASE_NAME'),
+            'ENGINE': config["DATABASE_ENGINE"],
+            'HOST': config["DATABASE_HOST"],
+            'PORT': config["DATABASE_PORT"],
+            'USER': config["DATABASE_USER"],
+            'PASSWORD': config["DATABASE_PASSWORD"],
+            'NAME': config["DATABASE_NAME"],
             'OPTIONS': {
                 'charset': 'utf8mb4',
                 'use_unicode': True, },
@@ -153,11 +164,11 @@ AUTH_USER_MODEL = "accounts.User"
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    BASE_DIR / "static",
 ]
 
-STATIC_ROOT = os.environ.get('STATIC_ROOT')
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "media"))
+STATIC_ROOT = config.get('STATIC_ROOT')
+MEDIA_ROOT = config.get('MEDIA_ROOT', BASE_DIR / "media")
 
 ######################################################################
 # LOGIN/LOGOUT REDIRECT

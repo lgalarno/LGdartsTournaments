@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 
 # Create your models here.
-
+#TODO your files in dashboard?
 class Zipcsvfile(models.Model):
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     filename = models.CharField(max_length=32)

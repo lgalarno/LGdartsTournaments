@@ -129,6 +129,7 @@ def main():
         The players PP HH22 and HH18 will be created in the db and should not already exist
         The tournaments 'LG_BB' and 'LG_501' be created in the db and should not already exist
     """
+    print('aaa')
     fnBB = 'scripts/BBScores.csv'
     fn501 = 'scripts/501_.csv'
     files = [fnBB, fn501]
@@ -169,4 +170,4 @@ def main():
 
 if __name__ == "__main__":
     print('starting...')
-    main()
+main()

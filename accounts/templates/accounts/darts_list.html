@@ -10,10 +10,11 @@
             <h3>Your have no darts.</h3>
         {% endif %}
         <a href="{% url 'accounts:create-darts' %}" role="button">
-            <i class="fa-regular fa-square-plus fa-lg" title="Add new darts"></i>
-            Add new darts
+{#            <i class="fa-regular fa-square-plus fa-lg" title="Add new darts"></i>#}
+            <span class="badge bg-primary rounded-pill" title="New tournament">+ New darts</span>
         </a>
     </div>
+    <br>
     {% if darts_list %}
         <div class="row">
             {% for darts in darts_list %}
@@ -23,17 +24,14 @@
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title"><a class="" href="{{ darts.get_absolute_url }}" title="Detail">{{ darts.name }}</a></h5>
-    {% comment %}                    <!-- View Details -->
                         <a href="{{ darts.get_absolute_url }}" class="card-link" role="button">
                             <i class="fa-solid fa-circle-info" title="Detail"></i>
                             Detail
-                        </a>{% endcomment %}
-                        <!-- Update Darts -->
+                        </a>
                         <a href="{% url 'accounts:update-darts' darts.id %}" class="card-link" role="button">
                             <i class="fa-solid fa-pen-to-square" title="Edit"></i>
                             Edit
                         </a>
-                        <!-- Delete Darts -->
                         <a href="{% url 'accounts:delete-darts' darts.id %}" class="card-link" role="button">
                             <i class="fa-solid fa-trash" title="Delete"></i>
                             Delete

@@ -38,8 +38,9 @@ class Tournament(models.Model):
     )
     name = models.CharField(max_length=255)
     gametype = models.ForeignKey(to=GameType, default=1, on_delete=models.CASCADE, related_name='gametype', blank=False)
-    scheduling = models.CharField(choices=SCHEDULING, default='Continual', max_length=16, null=True,)
-    matching = models.CharField(choices=MATCHING, default='all', max_length=16, null=True)
+    # TODO check if blank=False still require self.fields['scheduling'].empty_label = None
+    scheduling = models.CharField(choices=SCHEDULING, default='Continual', max_length=16, blank=False)
+    matching = models.CharField(choices=MATCHING, default='all', max_length=16, blank=False)
     number_of_rounds = models.IntegerField(null=True, blank=True)
     darts = models.ManyToManyField(to=Darts, related_name="darts")
     start_date = models.DateField(null=True, blank=True)

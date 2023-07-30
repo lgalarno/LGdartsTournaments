@@ -11,27 +11,16 @@ class TournamentCreateForm(forms.ModelForm):
         fields = (
             'name',
             'gametype',
-            # 'matching',
-            # 'category',
             'darts',
             'city',
             'country',
-            # 'start_date',
-            # 'active'
         )
 
         labels = {
             "name": "Tournament name",
             "gametype": "Type of game",
-            # 'matching': 'Type of matching (all participants or pairs',
-            # "category": "Category",
             "darts": "Participants",
-            # "start_date": "Starting date",
-            # "active": "Tournament still ongoing?"
         }
-        # widgets = {
-        #     'start_date': forms.DateInput(attrs={'type': 'date'}),
-        # }
 
     def __init__(self, *args, **kwargs):
         # editable = kwargs.pop('editable', True)

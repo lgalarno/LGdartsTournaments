@@ -24,6 +24,17 @@ from .models import Game, Tournament, Participant
 # Create your views here.
 
 
+class AllTournamentsListView(ListView):
+    model = Tournament
+    template_name = 'games/all_tournaments_list.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data()
+        context['title'] = 'list-all-tournaments'
+        context['show_owner'] = True
+        return context
+
+
 class TournamentListView(LoginRequiredMixin, ListView):
     model = Tournament
 
@@ -33,6 +44,7 @@ class TournamentListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
         context['title'] = 'list-tournaments'
+        context['show_owner'] = False
         return context
 
 
@@ -40,13 +52,6 @@ class CreateTournament(LoginRequiredMixin, CreateView):
     context_object_name = 'Create'
     model = Tournament
     form_class = TournamentCreateForm
-
-    # def get_form(self):
-    #     form = super().get_form()
-    #     form.fields['darts'] = forms.ModelMultipleChoiceField(
-    #         queryset=Darts.objects.filter(user=self.request.user).filter(active=True)
-    #     )
-    #     return form
 
     def get_form_kwargs(self):
         kwargs = super(CreateTournament, self).get_form_kwargs()
@@ -210,17 +215,6 @@ class TournamentUpdateView(LoginRequiredMixin, UpdateView):
 class TournamentDeleteView(LoginRequiredMixin, DeleteView):
     model = Tournament
     success_url = reverse_lazy('games:list-tournaments')
-
-
-class AllTournamentsListView(ListView):
-    model = Tournament
-    paginate_by = 20
-    template_name = 'games/all_tournaments_list.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data()
-        context['title'] = 'list-all-tournaments'
-        return context
 
 
 def tournament_games(request, pk):

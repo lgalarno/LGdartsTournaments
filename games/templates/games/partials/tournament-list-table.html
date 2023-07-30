@@ -1,0 +1,80 @@
+<div class="row justify-content-md-center">
+    <div class="table-responsive">
+        <table class="table"  id="data_table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Scheduling</th>
+                    <th scope="col"># Games</th>
+                    <th scope="col">Table(s)</th>
+                    <th scope="col">Start date</th>
+                    <th scope="col">Status</th>
+                    {% if show_owner %}
+                        <th scope="col">Owner</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for t in tournament_list %}
+                <tr>
+                    <td>
+                        <a href = "{{ t.get_absolute_url }}">{{ t.name }}</a>
+                    </td>
+                    <td>
+                        {{ t.gametype }}
+                    </td>
+                    <td>
+                        {{ t.scheduling }}
+                    </td>
+                    <td>
+                        {{ t.get_number_of_games }} games
+                        {% if t.active %}
+                            {% if t.scheduling != "Round-robin"%}
+                                <a href="{% url 'games:game-create' tournament_id=t.id %}" >
+                                    <span class="badge bg-primary rounded-pill" title="New tournament">+ New result</span>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if t.scheduling == "Round-robin"%}
+                            <a href="{% url 'tables:tournament-rr-tables' tournament_id=t.id %}">
+                                <span class="badge bg-primary rounded-pill" title="New tournament">View</span>
+                            </a>
+                        {% else %}
+                            <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">
+                                <span class="badge bg-primary rounded-pill" title="New tournament">Ranks</span>
+                            </a>
+                            {% if t.gametype.name != '501' %}
+                                <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">
+                                    <span class="badge bg-primary rounded-pill" title="New tournament">Scores</span>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if t.start_date %}
+                            {{ t.start_date }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ t.active|yesno:"Ongoing,Ended" }}
+                    </td>
+                    {% if show_owner %}
+                    <td>
+                        {% if t.user.email %}
+                            <a href = "mailto: {{ t.user.email }}">{{ t.user.username }}</a>
+                        {% else %}
+                            {{ t.user.username }}
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+         </table>
+    </div>
+</div>

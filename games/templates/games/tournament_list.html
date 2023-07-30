@@ -14,80 +14,16 @@
         <!-- Create a tournament -->
        <br><br>
         <a href="{%  url 'games:create-tournaments' %}" role="button">
-            <i class="fa-regular fa-square-plus fa-lg" title="Create tournament"></i>
-            New tournament
+{#            <i class="fa-regular fa-square-plus fa-lg" title="Create tournament"></i>#}
+            <span class="badge bg-primary rounded-pill" title="New tournament">+ New tournament</span>
         </a>
         <br><br>
     </div>
     {% if tournament_list %}
-        <div class="row justify-content-md-center">
-
-            <div class="table-responsive">
-                <table class="table"  id="data_table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Game</th>
-                        <th scope="col">Scheduling</th>
-                        <th scope="col">Games</th>
-                        <th scope="col">Table(s)</th>
-                        <th scope="col">Start date</th>
-                        <th scope="col">Active</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for t in tournament_list %}
-                        <tr>
-                            <td>
-                                <a href = "{{ t.get_absolute_url }}">{{ t.name }}</a>
-                            </td>
-                            <td>
-                                {{ t.gametype }}
-                            </td>
-                            <td>
-                                {{ t.scheduling }}
-                            </td>
-                            <td>
-                                {{ t.get_number_of_games }} games
-                                {% if t.active %}
-                                    {% if t.scheduling != "Round-robin"%}
-                                        <a href="{% url 'games:game-create' tournament_id=t.id %}" class="btn btn-info btn-table">
-                                            New result
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if t.scheduling == "Round-robin"%}
-                                    <a href="{% url 'tables:tournament-rr-tables' tournament_id=t.id %}">
-                                        View
-                                    </a>
-                                {% else %}
-                                    <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">Ranks</a>
-                                    {% if t.gametype.name != '501' %}
-                                        , <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">Scores</a>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if t.start_date %}
-                                    {{ t.start_date }}
-                                {% else %}
-                                    --
-                                {% endif %}
-                            </td>
-                            <td>
-                                {{ t.active|yesno:"Yes,No" }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                 </table>
-            </div>
-        </div>
+        {% include 'games/partials/tournament-list-table.html' %}
     {% endif %}
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'js/games.js' %}"></script>
+    <script src="{% static 'js/data_table.js' %}"></script>
 {% endblock js %}

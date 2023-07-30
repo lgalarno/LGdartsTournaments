@@ -28,14 +28,18 @@
                     {% endif %}
                     <!-- Update Darts -->
                     {% if request.user.is_authenticated and request.user == darts.user %}
-                        <a href="{% url "accounts:update-darts" darts.id %}" class="card-link" role="button">
+                        <a href="{% url "accounts:update-darts" darts.id %}" class="card-link">
                             <i class="fa-solid fa-pen-to-square" title="Edit"></i>
                             Edit
                         </a>
                         <!-- Delete Darts -->
-                        <a href="{% url 'accounts:delete-darts' darts.id %}" class="card-link" role="button">
+                        <a href="{% url 'accounts:delete-darts' darts.id %}" class="card-link">
                             <i class="fa-solid fa-trash" title="Delete"></i>
                             Delete
+                        </a>
+                        <a href="{% url 'accounts:list-darts' %}" class="card-link">
+                        <i class="fa-solid fa-backward" title="Back"></i>
+                            Back
                         </a>
                     {% endif %}
                 </div>

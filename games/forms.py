@@ -128,7 +128,6 @@ class ParticipantForm(forms.ModelForm):
             "score": "Score",
             "rank": "Rank",
         }
-        # widgets = {'rank': forms.ChoiceField()}
 
     def __init__(self, *args, **kwargs):
         game_type = kwargs.pop('game_type', None)
@@ -137,8 +136,8 @@ class ParticipantForm(forms.ModelForm):
         if darts_qs:
             self.fields['darts'].queryset = darts_qs
             self.fields['darts'].empty_label = None
-            ranks_ckoices =  [(str(i), i) for i in range(1, len(darts_qs)+1)]
-            self.fields['rank'] = forms.ChoiceField(choices=ranks_ckoices)
+            ranks_choices = [(str(i), i) for i in range(1, len(darts_qs)+1)]
+            self.fields['rank'] = forms.ChoiceField(choices=ranks_choices)
             # TODO should not be hardcoded. ..gametype in [] set of gametype wher score should be disabled?
             if game_type == '501':
                 self.fields['score'].widget = forms.HiddenInput()

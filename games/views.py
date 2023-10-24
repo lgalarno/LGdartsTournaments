@@ -285,6 +285,16 @@ def game_create(request, tournament_id=None):
     return render(request, 'games/game_form.html', context)
 
 
+def new_result(request, tournament_id=None):
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    darts = tournament.darts.all()
+    context = {
+        'tournament': tournament,
+        'darts': darts
+        }
+    return render(request, 'games/new_result.html', context)
+
+
 def delete_game(request, pk):
     game = get_object_or_404(Game, id=pk)
     tournament = get_object_or_404(Tournament, id=game.tournament.id)

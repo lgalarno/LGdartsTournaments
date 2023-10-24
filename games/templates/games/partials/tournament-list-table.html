@@ -31,8 +31,9 @@
                         {{ t.get_number_of_games }} games
                         {% if t.active %}
                             {% if t.scheduling != "Round-robin"%}
-                                <a href="{% url 'games:game-create' tournament_id=t.id %}" >
-                                    <span class="badge bg-primary rounded-pill" title="New tournament">+ New result</span>
+{#                                <a href="{% url 'games:game-create' tournament_id=t.id %}" >#}
+                                <a href="{% url 'games:new-result' tournament_id=t.id %}" >
+                                    <span class="badge bg-primary rounded-pill" title="New result">+ New result</span>
                                 </a>
                             {% endif %}
                         {% endif %}
@@ -40,15 +41,15 @@
                     <td>
                         {% if t.scheduling == "Round-robin"%}
                             <a href="{% url 'tables:tournament-rr-tables' tournament_id=t.id %}">
-                                <span class="badge bg-primary rounded-pill" title="New tournament">View</span>
+                                <span class="badge bg-primary rounded-pill" title="View tournament">View</span>
                             </a>
                         {% else %}
                             <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">
-                                <span class="badge bg-primary rounded-pill" title="New tournament">Ranks</span>
+                                <span class="badge bg-primary rounded-pill" title="Ranks table">Ranks</span>
                             </a>
                             {% if t.gametype.name != '501' %}
                                 <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">
-                                    <span class="badge bg-primary rounded-pill" title="New tournament">Scores</span>
+                                    <span class="badge bg-primary rounded-pill" title="Scores table">Scores</span>
                                 </a>
                             {% endif %}
                         {% endif %}

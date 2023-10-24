@@ -18,6 +18,7 @@ urlpatterns = [
     # path('update-tournament/<int:pk>/', TournamentUpdateView.as_view(), name="update-tournament"),
     path('delete-tournament/<int:pk>/', TournamentDeleteView.as_view(), name="delete-tournament"),
     path('delete-game/<int:pk>/', views.delete_game, name="delete-game"),
+    path('new-result/<int:tournament_id>/', views.new_result, name="new-result"),
     path('game-create/<int:tournament_id>/', views.game_create, name="game-create"),
     path('edit-game/<int:pk>/', GameUpdateView.as_view(), name="edit-game")
 ]

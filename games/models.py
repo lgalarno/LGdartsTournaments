@@ -71,7 +71,7 @@ class Game(models.Model):
     datetime = models.DateTimeField(blank=True, null=True)
     tournament = models.ForeignKey(to=Tournament, on_delete=models.CASCADE)
     round = models.IntegerField(blank=True, null=True)
-    played = models.BooleanField(default=True)
+    played = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-datetime', 'round']

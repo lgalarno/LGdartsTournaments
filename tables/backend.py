@@ -169,6 +169,7 @@ def round_robin_formset(tournament):
                 f = RRParticipantForm(instance=p, game_type=gametype)
                 formset_dict[g.id].append(f)
             formset_dict[g.id].append(g.played)
+    print(formset_dict)
     standings_tbl = rr_standings(p_ranks, p_scores, gametype)
     standings_headers = ['W', 'L', 'D', 'pts']
     if gametype != '501':

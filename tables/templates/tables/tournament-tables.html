@@ -7,7 +7,7 @@
         <h2>{{ tournament.name }} {{ tournament.gametype }} tables</h2>
 
         {% if tournament.active %}
-             <a href="{% url 'games:game-create' tournament_id=tournament.id %}" role="button">
+             <a href="{% url 'tournaments:game-create' tournament_id=tournament.id %}" role="button">
                 <i class="fa-regular fa-square-plus fa-lg" title="New game"></i>
                 New game
              </a>
@@ -32,10 +32,10 @@
                             <td>{{ s }}</td>
                         {% endfor %}
                         <td>
-                            <a href="{% url "games:edit-game" k %}" class="btn btn-light btn-sm" role="button">
+                            <a href="{% url "tournaments:edit-game" k %}" class="btn btn-light btn-sm" role="button">
                                 <i class="fa-solid fa-pen-to-square" title="edit" aria-hidden="true"></i>
                             </a>
-                            <a href="{% url "games:delete-game" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
+                            <a href="{% url "tournaments:delete-game" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
                                 <i class="fa-solid fa-trash" title="delete" aria-hidden="true"></i>
                             </a>
                         </td>

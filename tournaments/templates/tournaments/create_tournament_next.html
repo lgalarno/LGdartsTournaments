@@ -11,7 +11,7 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <a href="{% url 'games:update-tournament' pk=tournament.id %}"  class="btn btn-primary"> << Back </a>
+                <a href="{% url 'tournaments:update-tournament' pk=tournament.id %}"  class="btn btn-primary"> << Back </a>
                 <button type="submit" class="btn btn-primary"> {% if tournament.editable and tournament.scheduling == "Round-robin" %}Next  >>{% else %}Save{% endif %}</button>
             </form>
         </div>

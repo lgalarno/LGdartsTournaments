@@ -1,6 +1,7 @@
 import pandas as pd
 
-from games.models import Game, Tournament, Darts, Participant
+from tournaments.models import Game, Tournament, Darts, Participant
+
 
 def create_balanced_round_robin(players, nrr, byelble="bye", roundlbl="Round"):
     """

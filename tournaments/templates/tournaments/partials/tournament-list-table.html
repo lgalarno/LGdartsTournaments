@@ -31,8 +31,8 @@
                         {{ t.get_number_of_games }} games
                         {% if t.active %}
                             {% if t.scheduling != "Round-robin"%}
-{#                                <a href="{% url 'games:game-create' tournament_id=t.id %}" >#}
-                                <a href="{% url 'games:new-result' tournament_id=t.id %}" >
+                                <a href="{% url 'tournaments:game-create' tournament_id=t.id %}" >
+{#                                <a href="{% url 'tournaments:new-result' tournament_id=t.id %}" >#}
                                     <span class="badge bg-primary rounded-pill" title="New result">+ New result</span>
                                 </a>
                             {% endif %}

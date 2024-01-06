@@ -55,10 +55,10 @@ class Tournament(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('games:update-tournament', kwargs={'pk': self.pk})
+        return reverse('tournaments:update-tournament', kwargs={'pk': self.pk})
 
     def get_delete_url(self):
-        return reverse('games:delete-tournament', kwargs={'pk': self.pk})
+        return reverse('tournaments:delete-tournament', kwargs={'pk': self.pk})
 
     def get_number_of_games(self):
         return self.game_set.all().count()
@@ -80,10 +80,10 @@ class Game(models.Model):
         return f"{self.tournament}-{self.round}-{self.datetime}"
 
     def get_absolute_url(self):
-        return reverse('games:edit-game', kwargs={'pk': self.pk})
+        return reverse('tournaments:edit-game', kwargs={'pk': self.pk})
 
     def get_delete_url(self):
-        return reverse('games:delete-game', kwargs={'pk': self.pk})
+        return reverse('tournaments:delete-game', kwargs={'pk': self.pk})
 
     @property
     def get_datetime(self):

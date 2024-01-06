@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("games", "0003_remove_tournament_scheduling_and_more"),
+        ("tournaments", "0003_remove_tournament_scheduling_and_more"),
     ]
 
     operations = [

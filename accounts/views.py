@@ -31,7 +31,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect("games:list-tournaments")
+            return redirect("tournaments:list-tournaments")
     else:
         form = AuthenticationForm(request)
     context = {

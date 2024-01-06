@@ -11,7 +11,7 @@ import os
 import zipfile
 
 from accounts.models import User
-from games.models import Tournament, Game
+from tournaments.models import Tournament, Game
 
 
 from .backend import rankstable, bb_score_tables, write_csv, round_robin_formset

@@ -1,6 +1,6 @@
 from django import forms
 
-from games.models import Game, Participant
+from tournaments.models import Game, Participant
 
 
 class RRGameForm(forms.ModelForm):

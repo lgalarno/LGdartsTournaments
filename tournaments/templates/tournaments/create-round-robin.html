@@ -7,8 +7,8 @@
     <div class="row justify-content-md-center">
         <div class="col-md-3">
             <h3>Tournament  {{ tournament.name }}</h3>
-            <h4>Create a round robin</h4>
-            <form action="{% url 'games:create-round-robin' tournament_id=tournament.id %}" method="POST" id="form">
+            <h4>Create a round-robin</h4>
+            <form action="{% url 'tournaments:create-round-robin' tournament_id=tournament.id %}" method="POST" id="form">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button class="btn btn-primary" type="submit" id="btnNrounds" >Create</button>
@@ -22,7 +22,7 @@
         <div class="col-md-6">
             {% if schedule %}
                 <h3 class="d-inline-block">Games</h3>
-                <a href="{% url 'games:save-round-robin' tournament.id %}" class="btn btn-primary d-inline-block float-end">
+                <a href="{% url 'tournaments:save-round-robin' tournament.id %}" class="btn btn-primary d-inline-block float-end">
                     Accept
                 </a>
                 <div class="rrgames">

@@ -28,11 +28,11 @@
                         Tournaments
                     </a>
                     <ul class="dropdown-menu">
-                        <a class="nav-link" href="{% url 'games:list-all-tournaments' %}">All tournaments</a>
+                        <a class="nav-link" href="{% url 'tournaments:list-all-tournaments' %}">All tournaments</a>
 
                         {% if request.user.is_authenticated %}
-                            <a class="nav-link" href="{% url 'games:list-tournaments' %}">Your tournaments</a>
-                            <a class="nav-link" href="{%  url 'games:create-tournaments' %}" role="button">
+                            <a class="nav-link" href="{% url 'tournaments:list-tournaments' %}">Your tournaments</a>
+                            <a class="nav-link" href="{%  url 'tournaments:create-tournaments' %}" role="button">
                                 <i class="fa-regular fa-square-plus fa-lg" title="Create tournament"></i>
                                 New
                             </a>

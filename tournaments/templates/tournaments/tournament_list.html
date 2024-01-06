@@ -13,14 +13,14 @@
         </h3>
         <!-- Create a tournament -->
        <br><br>
-        <a href="{%  url 'games:create-tournaments' %}" role="button">
+        <a href="{%  url 'tournaments:create-tournaments' %}" role="button">
 {#            <i class="fa-regular fa-square-plus fa-lg" title="Create tournament"></i>#}
             <span class="badge bg-primary rounded-pill" title="New tournament">+ New tournament</span>
         </a>
         <br><br>
     </div>
     {% if tournament_list %}
-        {% include 'games/partials/tournament-list-table.html' %}
+        {% include 'tournaments/partials/tournament-list-table.html' %}
     {% endif %}
 {% endblock %}
 

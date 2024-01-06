@@ -77,7 +77,7 @@ class CreateTournament(LoginRequiredMixin, CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('games:create-tournaments-next', kwargs={'tournament_id': self.object.pk})
+        return reverse_lazy('tournaments:create-tournaments-next', kwargs={'tournament_id': self.object.pk})
 
 
 def update_tournament(request, pk=None):
@@ -86,7 +86,7 @@ def update_tournament(request, pk=None):
         form = TournamentCreateForm(request.POST or None, instance=tournament)
         if form.is_valid():
             form.save()
-            return redirect('games:create-tournaments-next', tournament_id=tournament.id)
+            return redirect('tournaments:create-tournaments-next', tournament_id=tournament.id)
     else:
         form = TournamentUpdateForm(request.POST or None, instance=tournament)
     if form.is_valid():
@@ -96,7 +96,7 @@ def update_tournament(request, pk=None):
         'form': form,
         "tournament": tournament,
     }
-    return render(request, 'games/tournament_form.html', context)
+    return render(request, 'tournaments/tournament_form.html', context)
 
 
 def create_tournament_next(request, tournament_id=None):
@@ -109,7 +109,7 @@ def create_tournament_next(request, tournament_id=None):
     if form.is_valid():
         form.save()
     if request.method == "POST" and tournament.scheduling == 'Round-robin':
-        return HttpResponseRedirect(reverse("games:create-round-robin", kwargs={'tournament_id': tournament.id}))
+        return HttpResponseRedirect(reverse("tournaments:create-round-robin", kwargs={'tournament_id': tournament.id}))
         # return render(request, 'games/create-round-robin.html', context)
 
     context = {
@@ -117,7 +117,7 @@ def create_tournament_next(request, tournament_id=None):
         'form': form,
         "tournament": tournament,
     }
-    return render(request, 'games/create_tournament_next.html', context)
+    return render(request, 'tournaments/create_tournament_next.html', context)
 
 
 def create_tournament_rr(request, tournament_id=None):
@@ -138,7 +138,7 @@ def create_tournament_rr(request, tournament_id=None):
         s = create_balanced_round_robin(players, nfullrounds)
         request.session['schedule'] = s
         context['schedule'] = s
-    return render(request, 'games/create-round-robin.html', context)
+    return render(request, 'tournaments/create-round-robin.html', context)
 
 
 def save_tournament_rr(request, tournament_id=None):
@@ -171,7 +171,7 @@ def save_tournament_rr(request, tournament_id=None):
         tournament.number_of_rounds = games.last().round
         tournament.editable = False
         tournament.save()
-        return render(request, 'games/rr-view-games.html', context)
+        return render(request, 'tournaments/rr-view-games.html', context)
     else:
         return Http404
 
@@ -209,12 +209,12 @@ class TournamentUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('games:create-tournaments-next', kwargs={'tournament_id': self.object.pk})
+        return reverse_lazy('tournaments:create-tournaments-next', kwargs={'tournament_id': self.object.pk})
 
 
 class TournamentDeleteView(LoginRequiredMixin, DeleteView):
     model = Tournament
-    success_url = reverse_lazy('games:list-tournaments')
+    success_url = reverse_lazy('tournaments:list-tournaments')
 
 
 def tournament_games(request, pk):
@@ -229,7 +229,7 @@ def tournament_games(request, pk):
         "tables": games,
         'nplayerslist': nplayerslist
     }
-    return render(request, f'games/tournament_games.html', context)
+    return render(request, f'tournaments/tournament_games.html', context)
 
 
 def game_create(request, tournament_id=None):
@@ -282,7 +282,7 @@ def game_create(request, tournament_id=None):
         'new_result_btn': new_result_btn,
         'participant_formset': participant_formset
         }
-    return render(request, 'games/game_form.html', context)
+    return render(request, 'tournaments/game_form.html', context)
 
 
 def new_result(request, tournament_id=None):
@@ -292,7 +292,7 @@ def new_result(request, tournament_id=None):
         'tournament': tournament,
         'darts': darts
         }
-    return render(request, 'games/new_result.html', context)
+    return render(request, 'tournaments/new_result.html', context)
 
 
 def delete_game(request, pk):

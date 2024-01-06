@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # custom app
     "accounts",
-    "games",
-    "tables"
+    "tables",
+    "tournaments"
 ]
 
 MIDDLEWARE = [

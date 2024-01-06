@@ -1,10 +1,10 @@
 from django.urls import path, include
 
-from games import views
+from tournaments import views
 from .views import TournamentListView, CreateTournament, TournamentDetailView, TournamentUpdateView, \
     TournamentDeleteView, AllTournamentsListView, GameUpdateView
 
-app_name = 'games'
+app_name = 'tournaments'
 
 urlpatterns = [
     path('list-tournaments', TournamentListView.as_view(), name="list-tournaments"),

@@ -3,18 +3,29 @@
 {% block title %}{{ tbl_type }}{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <h2>{{ tournament.name }} {{ tournament.gametype }} tables</h2>
-
+    <div class="rightmenu">
         {% if tournament.active %}
-             <a href="{% url 'tournaments:game-create' tournament_id=tournament.id %}" role="button">
-                <i class="fa-regular fa-square-plus fa-lg" title="New game"></i>
-                New game
-             </a>
+            <a class="rightmenulink" href="{% url 'tournaments:game-create' tournament_id=tournament.id %}">+ new result</a>
         {% endif %}
-        <hr style="border-top: 2px solid #d9d9d9;">
+        <a class="rightmenulink"  href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type=tbl_type %}">export to csv</a>
+        <a class="rightmenulink"  href="{% url 'tables:export-zip' tournament_id=tournament.id %}">export to zip</a>
     </div>
+    <h2>{{ tournament.name }} {{ tournament.gametype }} tables</h2>
+{#        {% if tournament.active %}#}
+{#             <a href="{% url 'tournaments:game-create' tournament_id=tournament.id %}" role="button">#}
+{#                <i class="fa-regular fa-square-plus fa-lg" title="New game"></i>#}
+{#                + Enter new result#}
+{#             </a>#}
+{#        {% endif %}#}
+{#        <a href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type=tbl_type %}" >#}
+{#            Export table to csv#}
+{#        </a>#}
+{#        <a href="{% url 'tables:export-zip' tournament_id=tournament.id %}" >#}
+{#            Export tables to zip#}
+{#        </a>#}
+
     <div class="row">
+    <hr style="border-top: 2px solid #d9d9d9;">
         <div class="col-lg-6">
             <h3>Games</h3>
             <table class="table table-striped" id="games_table">
@@ -32,11 +43,14 @@
                             <td>{{ s }}</td>
                         {% endfor %}
                         <td>
-                            <a href="{% url "tournaments:edit-game" k %}" class="btn btn-light btn-sm" role="button">
-                                <i class="fa-solid fa-pen-to-square" title="edit" aria-hidden="true"></i>
+                            <a href="{% url "tournaments:edit-game" k %}" title="edit" >
+                                <i class="bi bi-pencil"></i>
+{#                                <i class="fa-regular fa-pen-to-square" title="edit" aria-hidden="true"></i>#}
                             </a>
-                            <a href="{% url "tournaments:delete-game" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
-                                <i class="fa-solid fa-trash" title="delete" aria-hidden="true"></i>
+                            &nbsp;
+                            <a href="{% url "tournaments:delete-game" k %}" onclick="return confirm('Are you sure?')" title="delete">
+                                <i class="bi bi-x-circle"></i>
+{#                                <i class="fa-solid fa-trash" title="delete" aria-hidden="true"></i>#}
                             </a>
                         </td>
                     </tr>
@@ -80,12 +94,12 @@
             {% endif %}
             <br>
             <br>
-            <a href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type=tbl_type %}" class="btn btn-primary" role="button">
-                Export table to csv
-            </a>
-            <a href="{% url 'tables:export-zip' tournament_id=tournament.id %}" class="btn btn-primary" role="button">
-                Export tables to zip
-            </a>
+{#            <a href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type=tbl_type %}" class="btn btn-primary" role="button">#}
+{#                Export table to csv#}
+{#            </a>#}
+{#            <a href="{% url 'tables:export-zip' tournament_id=tournament.id %}" class="btn btn-primary" role="button">#}
+{#                Export tables to zip#}
+{#            </a>#}
         </div>
     </div>
 

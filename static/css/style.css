@@ -20,6 +20,7 @@ footer {
 }
 a {
   color: #666666;
+  text-decoration: none;
 }
 a:hover {
   color: #000000;
@@ -58,4 +59,16 @@ select {
   // border: none;
   border-radius: 5px;
 
+}
+
+.rightmenu{
+  float: right;
+}
+
+a.rightmenulink {
+  padding: 0px 5px;
+  font-size: small;
+  word-wrap: normal;
+  display: inline-block;
+  text-decoration: none;
 }

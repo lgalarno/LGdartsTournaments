@@ -19,7 +19,11 @@
             {% for t in tournament_list %}
                 <tr>
                     <td>
-                        <a href = "{{ t.get_absolute_url }}">{{ t.name }}</a>
+                        {% if request.user == t.user %}
+                            <a href = "{{ t.get_absolute_url }}">{{ t.name }}</a>
+                        {% else %}
+                            {{ t.name }}
+                        {% endif %}
                     </td>
                     <td>
                         {{ t.gametype }}
@@ -29,14 +33,14 @@
                     </td>
                     <td>
                         {{ t.get_number_of_games }} games
-                        {% if t.active %}
-                            {% if t.scheduling != "Round-robin"%}
-                                <a href="{% url 'tournaments:game-create' tournament_id=t.id %}" >
+{#                        {% if t.active %}#}
+{#                            {% if t.scheduling != "Round-robin"%}#}
+{#                                <a href="{% url 'tournaments:game-create' tournament_id=t.id %}" >#}
 {#                                <a href="{% url 'tournaments:new-result' tournament_id=t.id %}" >#}
-                                    <span class="badge bg-primary rounded-pill" title="New result">+ New result</span>
-                                </a>
-                            {% endif %}
-                        {% endif %}
+{#                                    <span class="badge bg-primary rounded-pill" title="New result">+ New result</span>#}
+{#                                </a>#}
+{#                            {% endif %}#}
+{#                        {% endif %}#}
                     </td>
                     <td>
                         {% if t.scheduling == "Round-robin"%}
@@ -44,12 +48,12 @@
                                 <span class="badge bg-primary rounded-pill" title="View tournament">View</span>
                             </a>
                         {% else %}
-                            <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}">
-                                <span class="badge bg-primary rounded-pill" title="Ranks table">Ranks</span>
+                            <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}" title="Ranks table">
+                                <span class="badge bg-primary rounded-pill" >Ranks</span>
                             </a>
                             {% if t.gametype.name != '501' %}
-                                <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}">
-                                    <span class="badge bg-primary rounded-pill" title="Scores table">Scores</span>
+                                <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}" title="Scores table">
+                                    <span class="badge bg-primary rounded-pill" >Scores</span>
                                 </a>
                             {% endif %}
                         {% endif %}

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Game, Participant
+from .models import Game, Participant, Tournament
 
 
 class ParticipantInline(admin.TabularInline):
@@ -14,3 +14,4 @@ class GameAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Game, GameAdmin)
 admin.site.register(Participant)
+admin.site.register(Tournament)

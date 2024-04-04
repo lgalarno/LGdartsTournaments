@@ -1,6 +1,6 @@
 [
     {
-        "model": "games.GameType",
+        "model": "tournaments.GameType",
         "pk": 1,
         "fields": {
             "name": "BB",
@@ -8,7 +8,7 @@
         }
     },
             {
-        "model": "games.GameType",
+        "model": "tournaments.GameType",
         "pk": 2,
         "fields": {
             "name": "501",
@@ -16,7 +16,7 @@
         }
     },
             {
-        "model": "games.GameType",
+        "model": "tournaments.GameType",
         "pk": 3,
         "fields": {
             "name": "Cricket",

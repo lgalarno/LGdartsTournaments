@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
                         default=1,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="gametype",
-                        to="games.gametype",
+                        to="tournaments.gametype",
                     ),
                 ),
                 (
@@ -149,7 +149,7 @@ class Migration(migrations.Migration):
                 (
                     "game",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="games.game"
+                        on_delete=django.db.models.deletion.CASCADE, to="tournaments.game"
                     ),
                 ),
             ],
@@ -158,7 +158,7 @@ class Migration(migrations.Migration):
             model_name="game",
             name="tournament",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="games.tournament"
+                on_delete=django.db.models.deletion.CASCADE, to="tournaments.tournament"
             ),
         ),
     ]

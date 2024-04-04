@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from accounts.models import Darts, User
-from games.models import Game, Participant, Tournament, GameType
+from tournaments.models import Game, Participant, Tournament, GameType
 
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -18,34 +18,36 @@ def csv_to_db(f, darts):
     BB	  1	2016-03-04	23:34	46	47	42
     the three last columns contains the score/rank. Order properly!!!
     """
-    try:
-        with open(f) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            for row in csv_reader:
-                print(row)
-                if len(row) > 1:
-                    dt = _get_dt(row[2], row[3])
-                    gametype = row[0]
-                    t = _get_tournament(gametype)
-                    g = Game(datetime=dt,
-                             tournament=t,
-                             played=True)
-                    g.save()
-                    pscore = [row[4 + i] for i in range(0, 3)]
-                    if gametype == 'BB':
-                        pranks = ranking(pscore)
-                    else:
-                        pranks = list(pscore)
-                        pscore = [None for i in range(len(pscore))]
+    #try:
+    with open(f) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            print(f'importing {row}')
+            if len(row) > 1:
+                dt = _get_dt(row[2], row[3])
+                gametype = row[0]
+                t = _get_tournament(gametype)
+                print(f'tournament name: {t.name}')
+                g = Game(datetime=dt,
+                         tournament=t,
+                         played=True)
+                g.save()
+                print('bbbb')
+                pscore = [row[4 + i] for i in range(0, 3)]
+                if gametype == 'BB':
+                    pranks = ranking(pscore)
+                else:
+                    pranks = list(pscore)
+                    pscore = [None for i in range(len(pscore))]
 
-                    for i, d in enumerate(darts):
-                        participant = Participant(game=g,
-                                                  rank=pranks[i],
-                                                  score=pscore[i],
-                                                  darts=d)
-                        participant.save()
-    except:
-        return False
+                for i, d in enumerate(darts):
+                    participant = Participant(game=g,
+                                              rank=pranks[i],
+                                              score=pscore[i],
+                                              darts=d)
+                    participant.save()
+    #except:
+        #return False
     return True
 
 
@@ -129,7 +131,7 @@ def main():
         The players PP HH22 and HH18 will be created in the db and should not already exist
         The tournaments 'LG_BB' and 'LG_501' be created in the db and should not already exist
     """
-    print('aaa')
+    print('startinng...')
     fnBB = 'scripts/BBScores.csv'
     fn501 = 'scripts/501_.csv'
     files = [fnBB, fn501]

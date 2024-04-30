@@ -1,0 +1,18 @@
+<table class="table table-striped" id="avg_tbl">
+    <thead>
+        <tr>
+            {% for s in avg_headers %}
+                <th >{{ s }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in avg_tbl %}
+            <tr>
+                {% for s in r %}
+                    <td>{{ s }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

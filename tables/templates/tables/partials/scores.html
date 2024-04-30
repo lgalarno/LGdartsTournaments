@@ -1,0 +1,26 @@
+<table class="table table-striped" id="scores_table">
+    <thead>
+        <tr>
+            {% for h in scores_headers %}
+                <th>{{ h }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for k, r in scores_tbl.items %}
+        <tr>
+            {% for s in r %}
+                <td>{{ s }}</td>
+            {% endfor %}
+            <td>
+                <a href="{% url "tournaments:edit-game" k %}" title="edit" >
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{% url "tournaments:delete-game" k %}" onclick="return confirm('Are you sure?')" title="delete">
+                    <i class="bi bi-x-circle"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

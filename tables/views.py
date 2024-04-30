@@ -20,6 +20,28 @@ from .models import Zipcsvfile
 
 # Create your views here.
 
+def tournament(request, tournament_id):
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    games = tournament.game_set.all().order_by('-datetime')
+    games_headers, games_tbl, standings_headers, standings_tbl = rankstable(games, tournament)
+    if tournament.gametype.name == 'BB' or tournament.gametype.name == 'Cricket':
+        scores_headers, scores_tbl, avg_headers, avg_tbl = bb_score_tables(games, tournament)
+    else:
+        scores_headers = scores_tbl = avg_headers = avg_tbl = False
+    context = {
+        "tournament": tournament,
+        'games_headers': games_headers,
+        'games_tbl': games_tbl,
+        'standings_headers': standings_headers,
+        'standings_tbl': standings_tbl,
+        'scores_headers': scores_headers,
+        'scores_tbl': scores_tbl,
+        'avg_headers': avg_headers,
+        'avg_tbl': avg_tbl
+    }
+    return render(request, f'tables/tournament.html', context)
+
+
 def tournament_tables(request, tournament_id, tbl_type):
     tournament = get_object_or_404(Tournament, id=tournament_id)
     games = tournament.game_set.all().order_by('-datetime')

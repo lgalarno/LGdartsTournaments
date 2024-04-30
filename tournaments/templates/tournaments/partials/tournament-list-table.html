@@ -4,10 +4,11 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
+                    <th scope="col"></th>
                     <th scope="col">Type</th>
                     <th scope="col">Scheduling</th>
                     <th scope="col"># Games</th>
-                    <th scope="col">Table(s)</th>
+{#                    <th scope="col">Table(s)</th>#}
                     <th scope="col">Start date</th>
                     <th scope="col">Status</th>
                     {% if show_owner %}
@@ -26,6 +27,11 @@
                         {% endif %}
                     </td>
                     <td>
+                        <a href="{% url 'tables:tournament' tournament_id=t.id %}">
+                            <span class="badge rounded-pill text-bg-primary" title="View">view</span>
+                        </a>
+                    </td>
+                    <td>
                         {{ t.gametype }}
                     </td>
                     <td>
@@ -42,22 +48,22 @@
 {#                            {% endif %}#}
 {#                        {% endif %}#}
                     </td>
-                    <td>
-                        {% if t.scheduling == "Round-robin"%}
-                            <a href="{% url 'tables:tournament-rr-tables' tournament_id=t.id %}">
-                                <span class="badge bg-primary rounded-pill" title="View tournament">View</span>
-                            </a>
-                        {% else %}
-                            <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}" title="Ranks table">
-                                <span class="badge bg-primary rounded-pill" >Ranks</span>
-                            </a>
-                            {% if t.gametype.name != '501' %}
-                                <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}" title="Scores table">
-                                    <span class="badge bg-primary rounded-pill" >Scores</span>
-                                </a>
-                            {% endif %}
-                        {% endif %}
-                    </td>
+{#                    <td>#}
+{#                        {% if t.scheduling == "Round-robin"%}#}
+{#                            <a href="{% url 'tables:tournament-rr-tables' tournament_id=t.id %}">#}
+{#                                <span class="badge bg-primary rounded-pill" title="View tournament">View</span>#}
+{#                            </a>#}
+{#                        {% else %}#}
+{#                            <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='ranks' %}" title="Ranks table">#}
+{#                                <span class="badge bg-primary rounded-pill" >Ranks</span>#}
+{#                            </a>#}
+{#                            {% if t.gametype.name != '501' %}#}
+{#                                <a href = "{% url 'tables:tournament-tables' tournament_id=t.id tbl_type='scores' %}" title="Scores table">#}
+{#                                    <span class="badge bg-primary rounded-pill" >Scores</span>#}
+{#                                </a>#}
+{#                            {% endif %}#}
+{#                        {% endif %}#}
+{#                    </td>#}
                     <td>
                         {% if t.start_date %}
                             {{ t.start_date }}

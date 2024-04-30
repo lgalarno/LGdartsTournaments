@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ tbl_type }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h2>{{ tournament.name }} {{ tournament.gametype }} tables</h2>
+        <hr style="border-top: 2px solid #d9d9d9;">
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            {% if schedule %}
+                <h3 class="d-inline-block">Games</h3>
+
+                    <table class="table">
+                        <tbody>
+                            {% for key, row in schedule.items %}
+                                <tr id="{{ key }}" >
+                                    {% if row|length == 1 %}
+                                        <th colspan="8" >
+                                            {{ row.0 }}
+                                        </th>
+                                    {% else %}
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <td>
+                                                {{ row.0 }}
+                                            </td>
+                                            <td>
+                                                {{ row.1 }}
+                                            </td>
+                                            <td>
+                                                {{ row.2 }}
+                                            </td>
+                                            <td>
+                                                {{ row.3 }}
+                                            </td>
+                                            <td>
+                                                {{ row.4.as_p }}
+                                            </td>
+                                            <td>
+                                                {{ row.5 }}
+                                            </td>
+                                            <td>
+                                                {{ row.6.as_p }}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" type="submit" name="submit" value="{{ key }}" >enter</button>
+{% comment %}                                                {% if row.7 %}
+                                                    <i class="fa-solid fa-check"></i>
+                                                {% else %}
+                                                    <button class="btn btn-primary" type="submit" name="submit" value="{{ key }}" >enter</button>
+                                                {% endif %}{% endcomment %}
+                                            </td>
+                                        </form>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            {% else %}
+                <h3>No games in the tournament</h3>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-1">
+        </div>
+
+        <div class="col-lg-5">
+            <h3>Standings</h3>
+            <table class="table" id="standings_table">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        {% for s in standings_headers %}
+                            <th >{{ s }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in standings_tbl %}
+                        <tr>
+                            {% for s in r %}
+                                <td>{{ s }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+{% comment %}            <a href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type=tbl_type %}" class="btn btn-primary" role="button">
+                Export table to csv
+            </a>
+            <a href="{% url 'tables:export-zip' tournament_id=tournament.id %}" class="btn btn-primary" role="button">
+                Export tables to zip
+            </a>{% endcomment %}
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/tables.js' %}"></script>
+{% endblock js %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center ">
+        <div class="col-md-10 bg-white p-3 mb-2 rounded shadow-sm text-center">
+            {% if request.user == tournament.user %}
+                <a href = "{{ tournament.get_absolute_url }}"><h2>{{ tournament.name }}</h2></a>
+            {% else %}
+                <h2>{{ tournament.name }}</h2>
+            {% endif %}
+            <div >
+                {% if tournament.active and request.user == tournament.user %}
+                    <a class="rightmenulink" href="{% url 'tournaments:game-create' tournament_id=tournament.id %}">
+                        <span class="badge rounded-pill bg-light text-dark">+ new result</span>
+                    </a>
+                {% endif %}
+                <a class="rightmenulink"  href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type='ranks' %}">
+                    <span class="badge rounded-pill bg-light text-dark">games to csv</span>
+                </a>
+                {% if tournament.gametype.name == 'BB' or tournament.gametype.name == 'Cricket'%}
+                    <a class="rightmenulink"  href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type='scores' %}">
+                        <span class="badge rounded-pill bg-light text-dark">scores to csv</span>
+                    </a>
+                {% endif %}
+                <a class="rightmenulink"  href="{% url 'tables:export-zip' tournament_id=tournament.id %}">
+                    <span class="badge rounded-pill bg-light text-dark">download zip</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="row justify-content-md-center ">
+        <div class="col-md-10 bg-white p-3 mb-2 rounded shadow-sm">
+            <h4>Standings &nbsp;<small><button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#standings-div">show/hide&#9660&#9650</button></small></h4>
+            <div id="standings-div" class="collapse">
+                {% include 'tables/partials/standings.html' %}
+            </div>
+        </div>
+
+        <div class="col-md-10 bg-white p-3 mb-2 rounded shadow-sm">
+            <h4>Games &nbsp;<small><button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#games-div">show/hide&#9660&#9650</button></small></h4>
+            <div id="games-div" class="collapse">
+                {% include 'tables/partials/games.html' %}
+            </div>
+        </div>
+
+        {% if tournament.gametype.name == 'BB' or tournament.gametype.name == 'Cricket'%}
+            <div class="col-md-10 bg-white p-3 mb-2 rounded shadow-sm">
+                <h4>Average scores table&nbsp;<small><button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#avg-scores">show/hide&#9660&#9650</button></small></h4>
+                <div id="avg-scores" class="collapse">
+                    {% include 'tables/partials/avg-scores.html' %}
+                </div>
+            </div>
+            <div class="col-md-10 bg-white p-3 mb-2 rounded shadow-sm">
+                <h4>Scores <small><button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#games-table">show/hide&#9660&#9650</button></small></h4>
+                <div id="games-table" class="collapse">
+                    {% include 'tables/partials/scores.html' %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/tables.js' %}"></script>
+{% endblock js %}

@@ -63,7 +63,6 @@ class Darts(models.Model):
 
     def get_absolute_url(self):
         return reverse('accounts:darts-detail', kwargs={'pk': self.pk})
-        # return reverse('accounts:update-darts', kwargs={'pk': self.pk})
 
 
 @receiver(models.signals.post_delete, sender=Darts)

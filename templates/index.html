@@ -6,7 +6,7 @@
             <h2>Welcome to LGdartsTournaments</h2>
             {% if not request.user.is_authenticated %}
                 <br>
-                <p>You need to <a href="{% url "accounts:login" %}">log in</a> before making any changes!</p>
+                <p>You need to <a href="{% url "accounts:login" %}">log in</a> to view that content!</p>
                 <p>Need an account? Please <a href={% url 'accounts:register' %}>Register</a></p>
             {% endif %}
         </div>

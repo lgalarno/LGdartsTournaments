@@ -4,7 +4,7 @@
 {% block content %}
     <br>
     <div class="row justify-content-md-center">
-        <div class="col-4">
+        <div class="col-4 login_form">
             {% if not request.user.is_authenticated %}
                 <form method='POST'>{% csrf_token %}
                     {{ form|crispy }}

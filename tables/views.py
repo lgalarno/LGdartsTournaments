@@ -29,6 +29,7 @@ def tournament(request, tournament_id):
     else:
         scores_headers = scores_tbl = avg_headers = avg_tbl = False
     context = {
+        "title": "tournament",
         "tournament": tournament,
         'games_headers': games_headers,
         'games_tbl': games_tbl,
@@ -54,6 +55,7 @@ def tournament_tables(request, tournament_id, tbl_type):
     else:
         raise Http404("This page does not exist")
     context = {
+        "title": "tables",
         "tbl_type": tbl_type,
         "tournament": tournament,
         'main_headers': main_headers,

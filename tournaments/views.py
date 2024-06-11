@@ -30,7 +30,7 @@ class AllTournamentsListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context['title'] = 'list-all-tournaments'
+        context['title'] = 'all tournaments'
         context['show_owner'] = True
         return context
 
@@ -43,7 +43,7 @@ class TournamentListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context['title'] = 'list-tournaments'
+        context['title'] = 'tournaments'
         context['show_owner'] = False
         return context
 
@@ -92,7 +92,7 @@ def update_tournament(request, pk=None):
     if form.is_valid():
         form.save()
     context = {
-        "title": "create_tournament",
+        "title": "create tournament",
         'form': form,
         "tournament": tournament,
     }
@@ -113,7 +113,7 @@ def create_tournament_next(request, tournament_id=None):
         # return render(request, 'games/create-round-robin.html', context)
 
     context = {
-        "title": "create_tournament_next",
+        "title": "create tournament next",
         'form': form,
         "tournament": tournament,
     }
@@ -276,6 +276,7 @@ def game_create(request, tournament_id=None):
         back_link = reverse("tables:tournament-tables", kwargs={'tournament_id': tournament.id,
                                                                 'tbl_type': 'ranks'})
     context = {
+        "title": "new game",
         'tournament': tournament,
         'back_link': back_link,
         'form': form_game,
@@ -289,6 +290,7 @@ def new_result(request, tournament_id=None):
     tournament = get_object_or_404(Tournament, id=tournament_id)
     darts = tournament.darts.all()
     context = {
+        "title": "new result",
         'tournament': tournament,
         'darts': darts
         }
@@ -349,6 +351,6 @@ class GameUpdateView(LoginRequiredMixin, UpdateView):
         context["participant_formset"] = participant_formset
         context['tournament'] = self.object.tournament
         context['back_link'] = back_link
-        context['title'] = 'update-game'
+        context['title'] = 'edit-game'
         context['deleteURL'] = self.object.get_delete_url()
         return context

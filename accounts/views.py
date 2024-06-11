@@ -102,7 +102,7 @@ class DartsUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context['title'] = 'update-darts'
+        context['title'] = 'edit-darts'
         return context
 
 
@@ -119,7 +119,7 @@ class DartsListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context['title'] = 'list-darts'
+        context['title'] = 'darts'
         return context
 
 
@@ -130,5 +130,5 @@ class AllDartsListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context['title'] = 'list-all-darts'
+        context['title'] = 'all darts'
         return context

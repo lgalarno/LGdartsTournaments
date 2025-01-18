@@ -13,19 +13,23 @@
             <div >
                 {% if tournament.active and request.user == tournament.user %}
                     <a class="rightmenulink" href="{% url 'tournaments:game-create' tournament_id=tournament.id %}">
-                        <span class="badge rounded-pill bg-light text-dark">+ new result</span>
+                        + new result
+{#                        <span class="badge rounded-pill bg-light text-dark">+ new result</span>#}
                     </a>
                 {% endif %}
                 <a class="rightmenulink"  href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type='ranks' %}">
-                    <span class="badge rounded-pill bg-light text-dark">games to csv</span>
+                    games to csv
+{#                    <span class="badge rounded-pill bg-light text-dark">games to csv</span>#}
                 </a>
                 {% if tournament.gametype.name == 'BB' or tournament.gametype.name == 'Cricket'%}
                     <a class="rightmenulink"  href="{% url 'tables:export-csv' tournament_id=tournament.id tbl_type='scores' %}">
-                        <span class="badge rounded-pill bg-light text-dark">scores to csv</span>
+                        scores to csv
+{#                        <span class="badge rounded-pill bg-light text-dark">scores to csv</span>#}
                     </a>
                 {% endif %}
                 <a class="rightmenulink"  href="{% url 'tables:export-zip' tournament_id=tournament.id %}">
-                    <span class="badge rounded-pill bg-light text-dark">download zip</span>
+                    download zip
+{#                    <span class="badge rounded-pill bg-light text-dark">download zip</span>#}
                 </a>
             </div>
 

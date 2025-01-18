@@ -65,14 +65,21 @@ select {
   float: right;
 }
 
+/*a.rightmenulink {*/
+/*  padding: 0px 5px;*/
+/*  font-size: small;*/
+/*  word-wrap: normal;*/
+/*  display: inline-block;*/
+/*  text-decoration: none;*/
+/*}*/
+
 a.rightmenulink {
   padding: 0px 5px;
-  font-size: small;
+  /*font-size: small;*/
   word-wrap: normal;
   display: inline-block;
-  text-decoration: none;
+  /*text-decoration: underline;*/
 }
-
 
 .default_form {
   /*max-width: 400px;*/

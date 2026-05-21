@@ -174,7 +174,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = config.get('STATIC_ROOT')
-MEDIA_ROOT = config.get('MEDIA_ROOT', BASE_DIR / '..' / "media")
+MEDIA_ROOT = config.get('MEDIA_ROOT', BASE_DIR / '..' / "autres" / "media")
 
 ######################################################################
 # LOGIN/LOGOUT REDIRECT

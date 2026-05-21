@@ -62,7 +62,6 @@ coverage.xml
 *.log
 .static_storage/
 .media/
-local_settings.py
 
 # Flask stuff:
 instance/
